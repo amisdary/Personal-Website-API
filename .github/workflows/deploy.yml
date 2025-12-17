@@ -25,14 +25,12 @@ jobs:
             kv/data/shared DOCKERHUB_USERNAME | DOCKERHUB_USERNAME;
             kv/data/shared DOCKERHUB_ACCESS_TOKEN | DOCKERHUB_TOKEN;
             kv/data/api DROPLET_IP | DROPLET_IP;
-            kv/data/api SSH_PRIVATE_KEY | SSH_KEY;
+            kv/data/api SSH_PRIVATE_KEY_B64 | SSH_KEY;
 
-      - name: Format SSH private key
+      - name: Decode SSH private key
         run: |
-          echo "$SSH_KEY" > /tmp/ssh_key
+          echo "${SSH_KEY}" | base64 --decode > /tmp/ssh_key
           chmod 600 /tmp/ssh_key
-        env:
-          SSH_KEY: ${{ env.SSH_KEY }}
 
       - name: Build commit image
         run: sudo docker build -t ${{ env.DOCKERHUB_USERNAME }}/personal-website-api:${{ github.sha }} .
