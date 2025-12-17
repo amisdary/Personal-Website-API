@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  personal-website-api:
+    image: ${DOCKERHUB_USERNAME:-amisdary}/personal-website-api:latest
+    container_name: personal-website-api
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+    networks:
+      - api-network
+
+networks:
+  api-network:
+    driver: bridge
