@@ -27,6 +27,11 @@ jobs:
             kv/data/api DROPLET_IP | DROPLET_IP;
             kv/data/api SSH_PRIVATE_KEY_B64 | SSH_KEY;
 
+      - name: Debug SSH_KEY
+        run: |
+          echo "SSH_KEY length: ${#SSH_KEY}"
+          echo "First 20 chars: ${SSH_KEY:0:20}"
+
       - name: Decode SSH private key
         run: |
           echo "${SSH_KEY}" | base64 --decode > /tmp/ssh_key
