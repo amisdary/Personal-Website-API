@@ -34,7 +34,7 @@ jobs:
 
       - name: Decode SSH private key
         run: |
-          echo "${SSH_KEY}" | base64 --decode > /tmp/ssh_key
+          echo "${SSH_KEY}" | tr -d '\r\n' | base64 --decode > /tmp/ssh_key
           chmod 600 /tmp/ssh_key
 
       - name: Build commit image
