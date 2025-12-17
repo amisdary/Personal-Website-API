@@ -26,17 +26,11 @@ jobs:
             kv/data/shared DOCKERHUB_ACCESS_TOKEN | DOCKERHUB_TOKEN;
             kv/data/api DROPLET_IP | DROPLET_IP;
             kv/data/api SSH_PRIVATE_KEY | SSH_KEY;
-            kv/data/api SSH_PRIVATE_KEY_B64 | SSH_KEY2;
-
-      - name: Debug SSH_KEY2
-        run: |
-          echo "SSH_KEY2 length: ${#SSH_KEY2}"
-          echo "First 20 chars: ${SSH_KEY2:0:20}"
 
       - name: Write SSH key to file
         run: |
-          echo "$SSH_KEY" > /tmp/ssh_key
-          chmod 600 /tmp/ssh_key
+          echo "$SSH_KEY" > $GITHUB_WORKSPACE/ssh_key
+          chmod 600 $GITHUB_WORKSPACE/ssh_key
 
       - name: Build commit image
         run: sudo docker build -t ${{ env.DOCKERHUB_USERNAME }}/personal-website-api:${{ github.sha }} .
@@ -60,7 +54,7 @@ jobs:
         with:
           host: ${{ env.DROPLET_IP }}
           username: deploy
-          key_path: /tmp/ssh_key
+          key_path: ${{ github.workspace }}/ssh_key
           source: docker-compose.yml
           target: "~/personal-website-api"
 
@@ -69,7 +63,7 @@ jobs:
         with:
           host: ${{ env.DROPLET_IP }}
           username: deploy
-          key_path: /tmp/ssh_key
+          key_path: ${{ github.workspace }}/ssh_key
           script: |
             cd ~/personal-website-api
             docker pull ${{ env.DOCKERHUB_USERNAME }}/personal-website-api:latest
