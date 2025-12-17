@@ -25,12 +25,13 @@ jobs:
             kv/data/shared DOCKERHUB_USERNAME | DOCKERHUB_USERNAME;
             kv/data/shared DOCKERHUB_ACCESS_TOKEN | DOCKERHUB_TOKEN;
             kv/data/api DROPLET_IP | DROPLET_IP;
-            kv/data/api SSH_PRIVATE_KEY | SSH_KEY;
+            kv/data/api SSH_PRIVATE_KEY | SSH_KEY
 
-      - name: Write SSH key to file
+      - name: Write SSH key to workspace
         run: |
-          echo "$SSH_KEY" > $GITHUB_WORKSPACE/ssh_key
-          chmod 600 $GITHUB_WORKSPACE/ssh_key
+          mkdir -p $GITHUB_WORKSPACE/.ssh
+          echo "$SSH_KEY" > $GITHUB_WORKSPACE/.ssh/ssh_key
+          chmod 600 $GITHUB_WORKSPACE/.ssh/ssh_key
 
       - name: Build commit image
         run: sudo docker build -t ${{ env.DOCKERHUB_USERNAME }}/personal-website-api:${{ github.sha }} .
@@ -54,7 +55,7 @@ jobs:
         with:
           host: ${{ env.DROPLET_IP }}
           username: deploy
-          key_path: ${{ github.workspace }}/ssh_key
+          key_path: ${{ github.workspace }}/.ssh/ssh_key
           source: docker-compose.yml
           target: "~/personal-website-api"
 
@@ -63,7 +64,7 @@ jobs:
         with:
           host: ${{ env.DROPLET_IP }}
           username: deploy
-          key_path: ${{ github.workspace }}/ssh_key
+          key_path: ${{ github.workspace }}/.ssh/ssh_key
           script: |
             cd ~/personal-website-api
             docker pull ${{ env.DOCKERHUB_USERNAME }}/personal-website-api:latest
