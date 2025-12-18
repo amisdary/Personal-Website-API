@@ -27,12 +27,6 @@ jobs:
             kv/data/api DROPLET_IP | DROPLET_IP;
             kv/data/api SSH_PRIVATE_KEY | SSH_KEY
 
-      - name: Write SSH key to workspace
-        run: |
-          mkdir -p $GITHUB_WORKSPACE/.ssh
-          echo "$SSH_KEY" > $GITHUB_WORKSPACE/.ssh/ssh_key
-          chmod 600 $GITHUB_WORKSPACE/.ssh/ssh_key
-
       - name: Build commit image
         run: sudo docker build -t ${{ env.DOCKERHUB_USERNAME }}/personal-website-api:${{ github.sha }} .
 
@@ -54,7 +48,7 @@ jobs:
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ env.DROPLET_IP }}
-          username: deploy
+          username: amisdary
           key: ${{ env.SSH_KEY }}
           source: docker-compose.yml
           target: "~/personal-website-api"
@@ -63,7 +57,7 @@ jobs:
         uses: appleboy/ssh-action@v1.1.0
         with:
           host: ${{ env.DROPLET_IP }}
-          username: deploy
+          username: amisdary
           key: ${{ env.SSH_KEY }}
           script: |
             cd ~/personal-website-api
