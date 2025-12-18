@@ -55,7 +55,7 @@ jobs:
         with:
           host: ${{ env.DROPLET_IP }}
           username: deploy
-          key_path: ${{ github.workspace }}/.ssh/ssh_key
+          key: ${{ env.SSH_KEY }}
           source: docker-compose.yml
           target: "~/personal-website-api"
 
@@ -64,7 +64,7 @@ jobs:
         with:
           host: ${{ env.DROPLET_IP }}
           username: deploy
-          key_path: ${{ github.workspace }}/.ssh/ssh_key
+          key: ${{ env.SSH_KEY }}
           script: |
             cd ~/personal-website-api
             docker pull ${{ env.DOCKERHUB_USERNAME }}/personal-website-api:latest
