@@ -16,10 +16,13 @@ WORKDIR /app
 
 COPY package*.json ./
 
-RUN npm ci --only=production
+RUN npm ci --only=production && \
+    npm install -g @opentelemetry/auto-instrumentations-node
 
 COPY --from=builder /app/dist ./dist
 
 EXPOSE 3000
+
+ENV NODE_OPTIONS="--require @opentelemetry/auto-instrumentations-node/register"
 
 CMD ["node", "dist/index.js"]
