@@ -38,7 +38,6 @@ app.use(notFoundHandler);
 app.use(errorHandler);
 
 const server = app.listen(PORT, () => {
-  console.log('does this print')
   logger.info('Server started successfully', {
     port: PORT,
     environment: process.env.NODE_ENV || 'development',
