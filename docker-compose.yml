@@ -10,6 +10,12 @@ services:
     environment:
       - NODE_ENV=production
       - PORT=3000
+      # OpenTelemetry Configuration
+      - OTEL_SERVICE_NAME=${OTEL_SERVICE_NAME:-personal-website-api}
+      - OTEL_EXPORTER_OTLP_ENDPOINT=${OTEL_EXPORTER_OTLP_ENDPOINT:-http://134.209.39.68:4317}
+      - OTEL_EXPORTER_OTLP_PROTOCOL=${OTEL_EXPORTER_OTLP_PROTOCOL:-http/protobuf}
+      - OTEL_TRACES_SAMPLER=${OTEL_TRACES_SAMPLER:-parentbased_always_on}
+      - OTEL_RESOURCE_ATTRIBUTES=service.version=${SERVICE_VERSION:-1.0.0},deployment.environment=${NODE_ENV:-production}
     networks:
       - api-network
 
