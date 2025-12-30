@@ -17,7 +17,7 @@ WORKDIR /app
 COPY package*.json ./
 
 RUN npm ci --only=production && \
-    npm install -g @opentelemetry/auto-instrumentations-node
+    npm install @opentelemetry/auto-instrumentations-node
 
 COPY --from=builder /app/dist ./dist
 
