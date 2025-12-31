@@ -7,6 +7,10 @@ services:
     restart: unless-stopped
     ports:
       - "3000:3000"
+    labels:
+      service: personal-website-api
+      tier: backend
+      environment: production
     environment:
       - NODE_ENV=production
       - PORT=3000
